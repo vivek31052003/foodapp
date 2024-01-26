@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const mongouri =
-  "mongodb+srv://vivek3105:Vivek%401234@cluster0.undbco6.mongodb.net/gofoodmern?retryWrites=true&w=majority";
+  "mongodb+srv://vivek3105:Vivek%401234@cluster0.undbco6.mongodb.net/gofoodmern";
 const mongoDB = async () => {
   try {
     mongoose.set("strictQuery", false);
@@ -14,11 +14,17 @@ const mongoDB = async () => {
           const fetcheddata = await mongoose.connection.db.collection(
             "food_items"
           );
-          fetcheddata.find({}).toArray(function (err, data) {
-            if (err) console.log(err);
-            else {
-              console.log();
-            }
+          fetcheddata.find({}).toArray( async function (err, data) {
+            const food_categoriy = await mongoose.connection.db.collection  ("foodCategory");
+            food_categoriy.find({}).toArray(function(err,catData){
+              
+              if(err) console.log(err);
+              else{
+                global.food_items = data;
+                global.food_category = catData;
+              }
+            })
+            
           });
         }
       }
